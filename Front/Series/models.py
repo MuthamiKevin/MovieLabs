@@ -1,10 +1,21 @@
 from django.db import models
-import datetime
+
+class Director(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     release_date = models.DateField()
-    director = models.CharField(max_length=255)
+    director = models.ForeignKey(Director, on_delete=models.CASCADE)
     description = models.TextField()
     poster = models.ImageField(upload_to='movie_posters/')
     video_file = models.FileField(upload_to='movie_files/')
@@ -19,8 +30,8 @@ class TVSerie(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     release_date = models.DateField()
-    director = models.ForeignKey('Director', on_delete=models.CASCADE)
-    genres = models.ManyToManyField('Genre')
+    director = models.ForeignKey(Director, on_delete=models.CASCADE)
+    genres = models.ManyToManyField(Genre)
     poster = models.ImageField(upload_to='tv_series_posters/')
     num_seasons = models.PositiveIntegerField()
     num_episodes = models.PositiveIntegerField()
@@ -50,10 +61,3 @@ class Episode(models.Model):
 
     def __str__(self):
         return f"{self.season.series.title} - S{self.season.number}E{self.number}: {self.title}"
-
-
-class Genre(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
