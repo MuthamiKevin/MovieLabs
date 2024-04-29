@@ -30,7 +30,7 @@ class TVSerie(models.Model):
         return self.title
 
 class Season(models.Model):
-    series = models.ForeignKey(TVSeries, on_delete=models.CASCADE)
+    series = models.ForeignKey(TVSerie, on_delete=models.CASCADE)
     number = models.PositiveIntegerField()
     release_date = models.DateField()
     poster = models.ImageField(upload_to='season_posters/')
